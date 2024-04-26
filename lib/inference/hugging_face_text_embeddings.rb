@@ -20,7 +20,17 @@ module ::DiscourseAi
             headers["X-API-KEY"] = SiteSetting.ai_hugging_face_tei_api_key
           end
 
-          conn = Faraday.new { |f| f.adapter FinalDestination::FaradayAdapter }
+          REQUEST_TIMEOUT = 600
+
+          connection_opts = {
+            request: {
+              write_timeout: REQUEST_TIMEOUT,
+              read_timeout: REQUEST_TIMEOUT,
+              open_timeout: REQUEST_TIMEOUT,
+            },
+          }
+
+          conn = Faraday.new(nil, connection_opts) { |f| f.adapter FinalDestination::FaradayAdapter }
           response = conn.post(api_endpoint, body, headers)
 
           raise Net::HTTPBadResponse if ![200].include?(response.status)
@@ -46,7 +56,17 @@ module ::DiscourseAi
             headers["X-API-KEY"] = SiteSetting.ai_hugging_face_tei_reranker_api_key
           end
 
-          conn = Faraday.new { |f| f.adapter FinalDestination::FaradayAdapter }
+          REQUEST_TIMEOUT = 600
+
+          connection_opts = {
+            request: {
+              write_timeout: REQUEST_TIMEOUT,
+              read_timeout: REQUEST_TIMEOUT,
+              open_timeout: REQUEST_TIMEOUT,
+            },
+          }
+
+          conn = Faraday.new(nil, connection_opts) { |f| f.adapter FinalDestination::FaradayAdapter }
           response = conn.post("#{api_endpoint}/rerank", body, headers)
 
           if response.status != 200
