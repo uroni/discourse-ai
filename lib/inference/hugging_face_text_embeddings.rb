@@ -3,6 +3,9 @@
 module ::DiscourseAi
   module Inference
     class HuggingFaceTextEmbeddings
+
+      REQUEST_TIMEOUT = 600
+
       class << self
         def perform!(content)
           headers = { "Referer" => Discourse.base_url, "Content-Type" => "application/json" }
@@ -19,8 +22,6 @@ module ::DiscourseAi
           if SiteSetting.ai_hugging_face_tei_api_key.present?
             headers["X-API-KEY"] = SiteSetting.ai_hugging_face_tei_api_key
           end
-
-          REQUEST_TIMEOUT = 600
 
           connection_opts = {
             request: {
@@ -55,8 +56,6 @@ module ::DiscourseAi
           if SiteSetting.ai_hugging_face_tei_reranker_api_key.present?
             headers["X-API-KEY"] = SiteSetting.ai_hugging_face_tei_reranker_api_key
           end
-
-          REQUEST_TIMEOUT = 600
 
           connection_opts = {
             request: {
